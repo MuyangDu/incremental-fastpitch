@@ -1,26 +1,32 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Parallel text-to-speech models have been widely applied for real-time speech synthesis, and they offer more controllability and a much faster synthesis process compared with conventional auto-regressive models. Although parallel models have benefits in many aspects, they become naturally unfit for incremental synthesis due to their fully parallel architecture such as transformer. In this work, we propose Incremental FastPitch, a novel FastPitch variant capable of incrementally producing high-quality Mel chunks by improving the architecture with chunk-based FFT blocks, training with receptive-field constrained chunk attention masks, and inference with fixed size past model states. Experimental results show that our proposal can produce speech quality comparable to the parallel FastPitch, with a significant lower latency that allows even lower response time for real-time speech applications.">
-  <title>Incremental FastPitch: Chunk-based High Quality Text to Speech</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+      content="Parallel text-to-speech models have been widely applied for real-time speech synthesis, and they offer more controllability and a much faster synthesis process compared with conventional auto-regressive models. Although parallel models have benefits in many aspects, they become naturally unfit for incremental synthesis due to their fully parallel architecture such as transformer. In this work, we propose Incremental FastPitch, a novel FastPitch variant capable of incrementally producing high-quality Mel chunks by improving the architecture with chunk-based FFT blocks, training with receptive-field constrained chunk attention masks, and inference with fixed size past model states. Experimental results show that our proposal can produce speech quality comparable to the parallel FastPitch, with a significant lower latency that allows even lower response time for real-time speech applications.">
+    <title>Incremental FastPitch: Chunk-based High Quality Text to Speech</title>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
-    integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
+      integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js" integrity="sha512-5BqtYqlWfJemW5+v+TZUs22uigI8tXeVah5S/1Z6qBLVO7gakAOtkOzUtgq6dsIo5c0NJdmGPs0H9I+2OHUHVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js"
+      integrity="sha512-5BqtYqlWfJemW5+v+TZUs22uigI8tXeVah5S/1Z6qBLVO7gakAOtkOzUtgq6dsIo5c0NJdmGPs0H9I+2OHUHVQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!-- Favicons -->
-  <meta name="theme-color" content="#712cf9">
+    <!-- Favicons -->
+    <meta name="theme-color" content="#712cf9">
 
-
-  <style>
+    <style>
     .bd-placeholder-img {
       font-size: 1.125rem;
       text-anchor: middle;
@@ -74,210 +80,863 @@
 
   </style>
 
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/5.2/examples/grid/grid.css"
+      rel="stylesheet">
+  </head>
 
-  <!-- Custom styles for this template -->
-  <link href="https://getbootstrap.com/docs/5.2/examples/grid/grid.css" rel="stylesheet">
-</head>
+  <body class="py-4">
 
-<body class="py-4">
+    <main>
+      <div class="container">
 
-  <main>
-    <div class="container">
+        <h1 class="mb-3">Incremental FastPitch: Chunk-based High Quality Text to
+          Speech</h1>
 
-      <h1 class="mb-3">Incremental FastPitch: Chunk-based High Quality Text to Speech</h1>
-
-      <div class="row">
-        <div class="col-6">
-          <!-- <p class="lead"><strong>Paper:</strong> <a href="https://arxiv.org/abs/2211.13939"
+        <div class="row">
+          <div class="col-6">
+            <!-- <p class="lead"><strong>Paper:</strong> <a href="https://arxiv.org/abs/2211.13939"
               target="_blank">https://arxiv.org/abs/2211.13939</a></p> -->
+          </div>
         </div>
-      </div>
 
-      <p>
-        Parallel text-to-speech models have been widely applied for real-time speech synthesis, and they offer more controllability and a much faster synthesis process compared with conventional auto-regressive models. Although parallel models have benefits in many aspects, they become naturally unfit for incremental synthesis due to their fully parallel architecture such as transformer. In this work, we propose Incremental FastPitch, a novel FastPitch variant capable of incrementally producing high-quality Mel chunks by improving the architecture with chunk-based FFT blocks, training with receptive-field constrained chunk attention masks, and inference with fixed size past model states. Experimental results show that our proposal can produce speech quality comparable to the parallel FastPitch, with a significant lower latency that allows even lower response time for real-time speech applications.
-      </p>
+        <p>
+          Parallel text-to-speech models have been widely applied for real-time
+          speech synthesis, and they offer more controllability and a much
+          faster synthesis process compared with conventional auto-regressive
+          models. Although parallel models have benefits in many aspects, they
+          become naturally unfit for incremental synthesis due to their fully
+          parallel architecture such as transformer. In this work, we propose
+          Incremental FastPitch, a novel FastPitch variant capable of
+          incrementally producing high-quality Mel chunks by improving the
+          architecture with chunk-based FFT blocks, training with
+          receptive-field constrained chunk attention masks, and inference with
+          fixed size past model states. Experimental results show that our
+          proposal can produce speech quality comparable to the parallel
+          FastPitch, with a significant lower latency that allows even lower
+          response time for real-time speech applications.
+        </p>
 
-      <h2 class="mt-4 mb-3">Audio Samples</h2>
-      <p>Dataset: <a href="https://www.data-baker.com/open_source.html" target="_blank">Chinese Standard Mandarin Speech Coprus (10000 Sentences)</a></p>
-      <hr />
-      <p>
-        <strong>FastPitch</strong>: The original Parallel FastPitch.<br />
-        <strong>Incremental FastPitch (Static)</strong>: Incremental FastPitch, trained with static chunk-based masks.<br />
-        <strong>Incremental FastPitch (Dynamic)</strong>: Incremental FastPitch, trained with dynamic chunk-based masks.<br />
-      </p>
-      <hr />
+        <h2 class="mt-4 mb-3">Audio Samples</h2>
+        <p>Dataset: <a href="https://www.data-baker.com/open_source.html"
+            target="_blank">Chinese Standard Mandarin Speech Coprus (10000
+            Sentences)</a></p>
+        <hr />
+        <p>
+          <strong>FastPitch</strong>: The original Parallel FastPitch.<br />
+          <strong>Incremental FastPitch (Static)</strong>: Incremental
+          FastPitch, trained with static chunk-based masks.<br />
+          <strong>Incremental FastPitch (Dynamic)</strong>: Incremental
+          FastPitch, trained with dynamic chunk-based masks.<br />
+        </p>
+        <hr />
 
-      <div class="row mb-3 text-center">
-        <div class="col-sm-12">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Ground Truth</th>
-                <th scope="col">FastPitch</th>
-                <th scope="col">Incremental FastPitch (Static)</th>
-                <th scope="col">Incremental FastPitch (Dynamic)</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div class="row mb-3 text-center">
+          <div class="col-sm-12">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
 
-              <tr data-toggle="tooltip" title="" data-bs-toggle="modal" data-bs-target="#sample1Modal">
-                <th scope="row" class="align-middle">Mel</th>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/1/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div">
-                    <img src="samples/1/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/1/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/1/gt/img/small.jpg">
-                  </div>
-                </td>
-              </tr>
-              <tr data-toggle="tooltip" title="">
-                <th scope="row" class="align-middle">Waveform</th>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/1/gt/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/1/par/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/1/incs/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/1/incd/audio.wav" type="audio/wav">
-                  </audio></td>
-              </tr>
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample1Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/1/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/1/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/1/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/1/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/1/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/1/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/1/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/1/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
 
-              <tr class="spacer">
-                <td colspan="2">&nbsp;</td>
-                <td colspan="2">&nbsp;</td>
-                <td colspan="2">&nbsp;</td>
-                <td colspan="2">&nbsp;</td>
-              </tr>
+              </tbody>
+            </table>
 
-              <tr data-toggle="tooltip" title="" data-bs-toggle="modal" data-bs-target="#sample2Modal">
-                <th scope="row" class="align-middle">Mel</th>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/2/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div">
-                    <img src="samples/2/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/2/gt/img/small.jpg">
-                  </div>
-                </td>
-                <td class="align-middle">
-                  <div>
-                    <img src="samples/2/gt/img/small.jpg">
-                  </div>
-                </td>
-              </tr>
-              <tr data-toggle="tooltip" title="">
-                <th scope="row" class="align-middle">Waveform</th>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/2/gt/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/2/par/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/2/incs/audio.wav" type="audio/wav">
-                  </audio></td>
-                <td class="align-middle"><audio style="width:220px" controls>
-                    <source src="samples/2/incd/audio.wav" type="audio/wav">
-                  </audio></td>
-              </tr>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
 
-            </tbody>
-          </table>
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample2Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/2/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/2/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/2/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/2/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/2/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/2/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/2/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/2/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample3Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/3/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/3/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/3/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/3/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/3/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/3/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/3/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/3/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample4Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/4/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/4/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/4/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/4/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/4/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/4/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/4/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/4/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample5Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/5/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/5/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/5/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/5/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample6Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/6/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/5/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/6/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/6/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/6/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/6/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample7Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/7/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/7/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/7/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/7/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/7/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/7/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/7/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/7/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Ground Truth</th>
+                  <th scope="col">FastPitch</th>
+                  <th scope="col">Incremental FastPitch (Static)</th>
+                  <th scope="col">Incremental FastPitch (Dynamic)</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr data-toggle="tooltip" title data-bs-toggle="modal"
+                  data-bs-target="#sample8Modal">
+                  <th scope="row" class="align-middle">Mel</th>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/8/gt/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/8/par/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/8/incs/mel/small.png">
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <div>
+                      <img src="samples/8/incd/mel/small.png">
+                    </div>
+                  </td>
+                </tr>
+                <tr data-toggle="tooltip" title>
+                  <th scope="row" class="align-middle">Waveform</th>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/8/gt/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/8/par/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/8/incs/audio.wav" type="audio/wav">
+                    </audio></td>
+                  <td class="align-middle"><audio style="width:220px" controls>
+                      <source src="samples/8/incd/audio.wav" type="audio/wav">
+                    </audio></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-
-      <div class="modal fade" id="sample1Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram Comparison</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-2">
-                <h5>Ground Truth</h5>
-                <img src="samples/1/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+        <div class="modal fade" id="sample1Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
               </div>
-              <div class="mb-2">
-                <h5>FastPitch</h5>
-                <img src="samples/1/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/1/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/1/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/1/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/1/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
               </div>
-              <div class="mb-2">
-                <h5>Incremental FastPitch (Static)</h5>
-                <img src="samples/1/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
               </div>
-              <div class="mb-2">
-                <h5>Incremental FastPitch (Dynamic)</h5>
-                <img src="samples/1/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal fade" id="sample2Modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram Comparison</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <div class="mb-2">
-                <h5>Ground Truth</h5>
-                <img src="samples/2/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+        <div class="modal fade" id="sample2Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
               </div>
-              <div class="mb-2">
-                <h5>FastPitch</h5>
-                <img src="samples/2/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/2/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/2/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/2/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/2/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
               </div>
-              <div class="mb-2">
-                <h5>Incremental FastPitch (Static)</h5>
-                <img src="samples/2/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
               </div>
-              <div class="mb-2">
-                <h5>Incremental FastPitch (Dynamic)</h5>
-                <img src="samples/2/gt/img/full.png" alt="Your Image" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="width: 100%; height: auto;">
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
-      </div>
 
-  </main>
+        <div class="modal fade" id="sample3Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/3/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/3/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/3/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/3/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-</body>
+        <div class="modal fade" id="sample4Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/4/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/4/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/4/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/4/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-</html>
+        <div class="modal fade" id="sample5Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/5/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/5/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/5/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/5/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="sample6Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/6/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/6/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/6/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/6/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="sample7Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/7/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/7/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/7/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/7/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="sample8Modal" data-bs-backdrop="static"
+          data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Mel-Spectrogram
+                  Comparison</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-2">
+                  <h5>Ground Truth</h5>
+                  <img src="samples/8/gt/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>FastPitch</h5>
+                  <img src="samples/8/par/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Static)</h5>
+                  <img src="samples/8/incs/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+                <div class="mb-2">
+                  <h5>Incremental FastPitch (Dynamic)</h5>
+                  <img src="samples/8/incd/mel/mel.png"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    style="width: 100%; height: auto;">
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </body>
+
+  </html>
